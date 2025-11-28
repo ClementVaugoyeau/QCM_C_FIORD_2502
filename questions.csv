@@ -9,3 +9,4 @@ What is usually used for large chunks of UI relevant annotations when creating a
 What do you add using @UI.lineItem: [{position: 10*i}]TravelID?;A table column displaying TravelID;A filter field for TravelID;The object page header displaying TravelID;;;A;Fiori Elements
 Which of the following are SAP Fiori elements templates?;List Report Page;Object Report;Overview Page (OVP);;;A,C;Fiori Elements
 You can enable the flexible column layout by doing the following;Using the Page Map;Adding a corresponding annotation.;Manually adding a corresponding setting to the manifest.json file.;;;A,C;Fiori Elements
+What does the page editor allow you to do for a list report or an object page table?;Add a new column;Add a new field to the OData service;Change table type;Change the order of columns;;A,C,D;Fiori Elements
