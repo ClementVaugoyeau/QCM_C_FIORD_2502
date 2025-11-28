@@ -1,0 +1,43 @@
+🙂:
+Generate multiple-choice questions
+
+🤖 Smallpdf.com:
+Questions:
+1. What are some SAP recommended ways of adding custom code to an SAP Fiori elements application?
+  A. Create new templates.
+  B. Use building blocks.
+  C. Create apps using the custom page template in the application generator.
+  D. Use controller extensions.
+
+2. What are some benefits of using OData V4 compared to OData V2?
+  A. Better UX consistency
+  B. Better data compression
+  C. Advanced analytical capabilities
+  D. Improved data types
+
+3. How can you configure the Flexible Column Layout in an SAP Fiori elements applications?
+  A. By adding a setting to the manifest.json file
+  B. By implementing a flexible custom extension
+  C. By adding a setting to the package.json file
+  D. By using the Page Map
+
+4. To visualize metrics using cards, which SAP Fiori elements template does SAP recommend to use?
+  A. Analytical List Page
+  B. List Report Page
+  C. Overview Page
+  D. Custom Page
+
+5. What are some examples of extension points?
+  A. Custom column
+  B. Field building block
+  C. Custom section
+  D. Custom action
+
+
+Answers:
+1. B
+2. C
+3. A
+4. C
+5. A
+

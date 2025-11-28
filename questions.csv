@@ -1,0 +1,11 @@
+Question;OptionA;OptionB;OptionC;OptionD;OptionE;Reponse;Theme
+What are some SAP recommended ways of adding custom code to an SAP Fiori elements application?;Create new templates.;Use building blocks.;Create apps using the custom page template in the application generator.;Use controller extensions.;Use private methods of SAP Fiori elements.;B,C,D;Fiori
+What are some benefits of using OData V4 compared to OData V2?;Better UX consistency;Better data compression;Advanced analytical capabilities;Improved data types; Flexible programming model;B,C,D,E;Fiori
+How can you configure the Flexible Column Layout in an SAP Fiori elements applications?;By adding a setting to the manifest.json file;By implementing a flexible custom extension;By adding a setting to the package.json file;By using the Page Map;;A,D;Fiori
+To visualize metrics using cards, which SAP Fiori elements template does SAP recommend to use?;Analytical List Page;List Report Page;Overview Page;Custom Page;;C;Fiori
+What are some examples of extension points?;Custom column;Field building block;Custom section;Custom action;Table building block;A,C,D;Fiori
+Which mandatory building blocks are combined by SAP Fiori elements to generate an application?;OData service;Annotations;Floorplans;Configuration;Custom code;A,B,C;Fiori Elements
+What is usually used for large chunks of UI relevant annotations when creating an OData Service with ABAP RESTful Application Programming Model?;MIME repository;TXT files;Metadata extensions;ABAP Dictionary;;C;Fiori Elements
+What do you add using @UI.lineItem: [{position: 10*i}]TravelID?;A table column displaying TravelID;A filter field for TravelID;The object page header displaying TravelID;;;A;Fiori Elements
+Which of the following are SAP Fiori elements templates?;List Report Page;Object Report;Overview Page (OVP);;;A,C;Fiori Elements
+You can enable the flexible column layout by doing the following;Using the Page Map;Adding a corresponding annotation.;Manually adding a corresponding setting to the manifest.json file.;;;A,C;Fiori Elements
