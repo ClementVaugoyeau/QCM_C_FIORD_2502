@@ -170,6 +170,7 @@ body {
     min-width: 120px;
     transition: background 0.2s;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    margin-top: 1rem;
 }
 
 #next-btn:hover {
@@ -260,3 +261,31 @@ body {
 .text-success { color: var(--sapPositiveColor); font-weight: bold; }
 .text-danger { color: var(--sapCriticalColor); font-weight: bold; }
 .text-warning { color: #E9730C; font-weight: bold; } /* Orange SAP */
+
+/* Utilitaire pour cacher des éléments */
+.hide {
+    display: none !important;
+}
+
+/* Style spécifique pour l'écran de démarrage */
+#start-screen {
+    text-align: center;
+}
+
+.start-btn-container {
+    display: flex;
+    flex-direction: column; /* Ou row si tu préfères */
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.start-btn {
+    text-align: center; /* Centrer le texte pour ces boutons */
+    font-weight: 700;
+    color: var(--sapBrandColor);
+}
+
+.start-btn:hover {
+    background-color: var(--sapSelectedColor);
+    border-color: var(--sapSelectedBorder);
+}

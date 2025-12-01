@@ -1,47 +1,83 @@
-// Eléments du DOM
+// --- Eléments du DOM ---
+const startScreen = document.getElementById("start-screen");
+const quizContainer = document.getElementById("quiz-container");
+const startButtons = document.querySelectorAll(".start-btn");
+
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
 
-let questions = [];
+// --- Variables Globales ---
+let allQuestions = []; // Contient TOUTES les questions chargées du CSV
+let questions = [];    // Contient SEULEMENT les questions de la partie en cours
 let currentQuestionIndex = 0;
 let score = 0;
 let isQuestionValidated = false;
 
-// Chargement du CSV
+// --- Chargement initial ---
 fetch('questions.csv')
     .then(response => response.text())
     .then(data => {
         parseCSV(data);
-        shuffleArray(questions); 
-        startQuiz();
+        // On ne lance plus startQuiz() ici directement.
+        // On attend que l'utilisateur choisisse le nombre de questions.
+        console.log("Questions chargées : " + allQuestions.length);
     })
     .catch(error => console.error("Erreur CSV:", error));
 
+// --- Gestion des clics sur le menu de démarrage ---
+startButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const count = btn.dataset.count;
+        initGame(count);
+    });
+});
+
+function initGame(count) {
+    // 1. On mélange la totalité des questions disponibles
+    shuffleArray(allQuestions);
+
+    // 2. On sélectionne le nombre demandé
+    if (count === "all") {
+        questions = [...allQuestions]; // Copie tout
+    } else {
+        // ParseInt pour s'assurer que c'est un nombre, puis slice
+        let limit = parseInt(count);
+        // Sécurité : ne pas essayer de prendre plus de questions qu'il n'y en a
+        if (limit > allQuestions.length) limit = allQuestions.length;
+        questions = allQuestions.slice(0, limit);
+    }
+
+    // 3. Changement d'interface
+    startScreen.classList.add("hide");
+    quizContainer.classList.remove("hide");
+
+    // 4. Lancement
+    startQuiz();
+}
+
+// --- Parsing CSV ---
 function parseCSV(csvText) {
     const lines = csvText.trim().split('\n');
-    
-    // i = 1 pour sauter l'en-tête
+    allQuestions = []; // Réinitialisation
+
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
         if (line) {
             const parts = line.split(';');
             
-            // STRUCTURE DU CSV :
-            // 0: Question
-            // 1-5: Options A-E
-            // 6: Réponse(s)
-            // 7: Thème (NOUVEAU)
+            // Sécurité pour éviter les lignes vides ou incomplètes
+            if (parts.length < 6) continue;
 
             const correctAnswerStr = (parts[6] || "").trim().toUpperCase();
-            const themeStr = (parts[7] || "Général").trim(); // Récupération du thème
-            
+            const themeStr = (parts[7] || "Général").trim();
+
             const rawOptions = [
                 { id: 'A', text: parts[1] },
                 { id: 'B', text: parts[2] },
                 { id: 'C', text: parts[3] },
                 { id: 'D', text: parts[4] },
-                { id: 'E', text: parts[5] } 
+                { id: 'E', text: parts[5] }
             ];
 
             const cleanAnswers = [];
@@ -57,21 +93,24 @@ function parseCSV(csvText) {
             const newQuestion = {
                 question: parts[0],
                 answers: cleanAnswers,
-                theme: themeStr,       // On stocke le thème
-                userSuccess: false     // On initialise le succès à faux
+                theme: themeStr,
+                userSuccess: false
             };
             
-            questions.push(newQuestion);
+            allQuestions.push(newQuestion);
         }
     }
 }
 
+// --- Fonctions Utilitaires ---
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+// --- Logique du Quiz (Similaire à avant) ---
 
 function startQuiz() {
     currentQuestionIndex = 0;
@@ -84,10 +123,10 @@ function showQuestion() {
     let currentQuestion = questions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
     
-    // Ajout d'un petit badge pour afficher le thème en cours (optionnel mais sympa)
     questionElement.innerHTML = `
         <span class="theme-badge">${currentQuestion.theme}</span><br>
-        ${questionNo}. ${currentQuestion.question}
+        Question ${questionNo} / ${questions.length}<br>
+        ${currentQuestion.question}
     `;
     
     nextButton.innerHTML = "Valider";
@@ -136,7 +175,6 @@ function checkAnswer() {
         button.disabled = true;
     });
 
-    // Mise à jour du score ET de l'état de la question actuelle
     if (allCorrect) {
         score++;
         questions[currentQuestionIndex].userSuccess = true;
@@ -148,16 +186,13 @@ function checkAnswer() {
     nextButton.innerHTML = "Suivant";
 }
 
-// --- NOUVELLE FONCTION D'AFFICHAGE DU SCORE ---
 function showScore(){
     resetState();
     
-    // 1. Calcul du pourcentage global
     const percentage = Math.round((score / questions.length) * 100);
     
-    // 2. Calcul par Thème
+    // Stats par thème (basées uniquement sur les questions jouées)
     const statsByTheme = {};
-    
     questions.forEach(q => {
         if (!statsByTheme[q.theme]) {
             statsByTheme[q.theme] = { total: 0, success: 0 };
@@ -168,7 +203,6 @@ function showScore(){
         }
     });
 
-    // 3. Génération du HTML pour les stats
     let statsHTML = `<div class="stats-container">
         <h3>Détails par Thème :</h3>
         <table class="stats-table">
@@ -180,7 +214,6 @@ function showScore(){
 
     for (const [theme, data] of Object.entries(statsByTheme)) {
         const themePct = Math.round((data.success / data.total) * 100);
-        // Ajout d'une couleur selon la performance (vert si > 70%, rouge si < 40%)
         let colorClass = themePct >= 70 ? "text-success" : (themePct < 40 ? "text-danger" : "text-warning");
         
         statsHTML += `
@@ -193,7 +226,6 @@ function showScore(){
     }
     statsHTML += `</table></div>`;
 
-    // 4. Affichage final
     questionElement.innerHTML = `
         <div class="final-score-block">
             <h2>Votre Score Final</h2>
@@ -203,15 +235,18 @@ function showScore(){
         ${statsHTML}
     `;
 
-    nextButton.innerHTML = "Rejouer";
+    // Important : le bouton permet de revenir au MENU PRINCIPAL maintenant
+    nextButton.innerHTML = "Menu Principal"; 
     isQuestionValidated = true;
 }
 
 function handleNextButton(){
     if (isQuestionValidated) {
-        if (nextButton.innerHTML === "Rejouer") {
-            shuffleArray(questions);
-            startQuiz();
+        if (nextButton.innerHTML === "Menu Principal") {
+            // Retour au menu de démarrage
+            quizContainer.classList.add("hide");
+            startScreen.classList.remove("hide");
+            // On peut réinitialiser si besoin, mais initGame le fera au prochain clic
         } else {
             currentQuestionIndex++;
             if(currentQuestionIndex < questions.length){
